@@ -15,6 +15,4 @@ public interface PaymentWorkflow {
     @WorkflowMethod
     String doPayment(String accountId);
 
-    @SignalMethod
-    void approvalAction(String action);
 }

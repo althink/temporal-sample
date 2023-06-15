@@ -1,9 +1,9 @@
 package com.scb.sample.temporal;
 
-import io.temporal.api.common.v1.WorkflowExecution;
+import java.util.UUID;
+
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowOptions;
-import io.temporal.client.WorkflowStub;
 import io.temporal.serviceclient.WorkflowServiceStubs;
 
 public class InitiatePayment {
@@ -16,14 +16,11 @@ public class InitiatePayment {
         // WorkflowClient can be used to start, signal, query, cancel, and terminate Workflows.
         WorkflowClient client = WorkflowClient.newInstance(service);
 
-        // Define our workflow unique id
-        final String WORKFLOW_ID = "PaymentWorkflowID";
-
         /*
          * Set Workflow options such as WorkflowId and Task Queue so the worker knows where to list and which workflows to execute.
          */
         WorkflowOptions options = WorkflowOptions.newBuilder()
-                    .setWorkflowId(WORKFLOW_ID)
+                    .setWorkflowId("PaymentWorkflow-" + UUID.randomUUID().toString())
                     .setTaskQueue(Shared.PAYMENT_TASK_QUEUE)
                     .build();
 
@@ -40,9 +37,13 @@ public class InitiatePayment {
         WorkflowClient.start(workflow::doPayment, "123456");
 
         // do user action
-        workflow.approvalAction("approve");
+        // workflow.test("someValue");
+
+        //{"userId":"123456", "userGroups":["supportStaff"]}
 
         
+
+        //{"action":"approve"}
 
         // String workflowId = WorkflowStub.fromTyped(workflow).getExecution().getWorkflowId();
         // // Display workflow execution results

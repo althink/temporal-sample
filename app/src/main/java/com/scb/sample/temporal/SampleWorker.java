@@ -33,7 +33,7 @@ public class SampleWorker {
         * Workflow implementations must be known to the worker at runtime in
         * order to dispatch workflow tasks.
         */
-        worker.registerWorkflowImplementationTypes(PaymentWorkflowImpl.class);
+        worker.registerWorkflowImplementationTypes(PaymentWorkflowImpl.class, HumanTaskWorkflowImpl.class);
 
         /*
         * Register our Activity Types with the Worker. Since Activities are stateless and thread-safe,

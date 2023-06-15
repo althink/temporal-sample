@@ -26,18 +26,15 @@ public class PaymentWorkflowImpl implements PaymentWorkflow {
      */
     private final SampleActivities activity = Workflow.newActivityStub(SampleActivities.class, options);
 
-    private String approvalAction;
 
     // This is the entry point to the Workflow.
     @Override
     public String doPayment(String accountId) {
 
-        System.out.println("Wait for approval action");
+        HumanTaskWorkflow humanTaskWorkflow = Workflow.newChildWorkflowStub(HumanTaskWorkflow.class);
 
-        Workflow.await(() -> approvalAction != null);
-
-        System.out.println("Approval action: " + approvalAction);
-
+        String approvalAction = humanTaskWorkflow.askForApproval("supportStaff");
+        
         if (!"approve".equals(approvalAction)) {
             return "rejected";
         }
@@ -47,8 +44,4 @@ public class PaymentWorkflowImpl implements PaymentWorkflow {
         return result;
     }
 
-    @Override
-    public void approvalAction(String action) {
-        approvalAction = action;
-    }
 }
